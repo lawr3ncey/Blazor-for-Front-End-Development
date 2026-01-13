@@ -1,0 +1,27 @@
+@page "/lista"
+
+<h3>Lista de Elementos</h3>
+
+<ul>
+    @foreach(var elemento in elementos)
+    {
+        <li>@elemento</li>
+    }
+</ul>
+
+<input type="text" @bind="nuevoElemento" placeholder="Nuevo elemento" />
+<button @onclick="AgregarElementos">Agregar</button>
+
+@code {
+    private List<string> elementos = new List<string>();// Lista para almacenar los elementos
+    private string nuevoElemento="";// Variable para enlazar con el campo de entrada
+
+    private void AgregarElementos()// Método para agregar un nuevo elemento a la lista
+    {
+        if (!string.IsNullOrWhiteSpace(nuevoElemento))// Verificar que el campo no esté vacío
+        {
+                elementos.Add(nuevoElemento);// Agregar el nuevo elemento a la lista
+                nuevoElemento = string.Empty; // Limpiar el campo de entrada
+        }
+    }    
+}

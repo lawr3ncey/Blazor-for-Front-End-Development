@@ -1,0 +1,52 @@
+@page "/events"
+@using EventEaseApp.Models
+@using EventEaseApp.Components
+@using System.Linq
+@inject NavigationManager NavigationManager
+
+<PageTitle>Eventos - EventEase</PageTitle>
+
+<h1>Eventos próximos</h1>
+
+<!-- Usamos Virtualize para renderizar sólo los elementos visibles en pantalla -->
+<Virtualize ItemsProvider="LoadItems" ItemSize="140">
+    <ItemContent Context="evento">
+        <div class="mb-3" @key="evento.Id">
+            <EventCard Event="@evento" />
+        </div>
+    </ItemContent>
+</Virtualize>
+
+@code {
+    private List<Event> eventos = new();//Lista de eventos (origen de datos en memoria para demo)
+
+    protected override void OnInitialized()
+    {
+        // Generar muchos eventos de ejemplo para demostrar virtualización
+        eventos = Enumerable.Range(1, 1000).Select(i => new Event
+        {
+            Id = i,
+            Name = $"Evento #{i} - Conferencia {i % 10}",
+            Date = DateTime.Now.AddDays(i % 30).AddHours(i % 24),
+            Location = $"Sede {(i % 20) + 1}"
+        }).ToList();
+    }
+
+    // ItemsProvider para Virtualize: devuelve un segmento de la lista según startIndex/count
+    private async ValueTask<ItemsProviderResult<Event>> LoadItems(ItemsProviderRequest request)
+    {
+        // Simular latencia de red ligera si fuera necesario (comentado en producción)
+        // await Task.Delay(20);
+
+        var totalItemCount = eventos.Count;
+        var take = Math.Min(request.Count, totalItemCount - request.StartIndex);
+        var slice = eventos.Skip(request.StartIndex).Take(take).ToArray();
+        return new ItemsProviderResult<Event>(slice, totalItemCount);
+    }
+
+    private void NavigateToEventDetails(Event evento)
+    {
+        if (evento == null) return;
+        NavigationManager.NavigateTo($"/events/{evento.Id}");
+    }
+}

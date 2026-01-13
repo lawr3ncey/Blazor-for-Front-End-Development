@@ -1,0 +1,20 @@
+﻿@*Página principal que muestra la lista de recetas*@ 
+@using RecipeManagerApp.Services
+@page "/"
+@inject RecipeService RecipeService
+
+<h3>Recipe List</h3>
+<ul>
+    @foreach (var recipe in RecipeService.Recipes)// Iterar sobre la lista de recetas
+    {
+        <li>
+            <strong>@recipe.Name</strong> 
+             <br />
+             @recipe.Description
+            <br />
+            <NavLink href="@($"/recipe/{recipe.Id}")" Match="NavLinkMatch.Prefix">View Details</NavLink>
+        </li>
+    }
+</ul>
+
+<NavLink href="/addrecipe">Add Recipe</NavLink>

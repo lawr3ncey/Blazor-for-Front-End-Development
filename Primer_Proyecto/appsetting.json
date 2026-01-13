@@ -1,0 +1,19 @@
+{
+  "ApiSettings": {
+    "BaseUrl": "https://api.myapp.com"
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=mi-servidor;Database=MiAppDb;Trusted_Connection=true;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "FeatureFlags": {
+    "EnableNewUI": true,
+    "MaxItemsPerPage": 50
+  }
+}

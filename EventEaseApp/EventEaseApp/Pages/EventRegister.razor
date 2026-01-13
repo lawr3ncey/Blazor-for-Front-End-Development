@@ -1,0 +1,90 @@
+@page "/events/{id:int}/register"
+@using EventEaseApp.Models
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@inject NavigationManager NavigationManager
+@inject EventEaseApp.Services.UserSessionState UserSession
+@inject EventEaseApp.Services.AttendanceService AttendanceService
+
+<PageTitle>Registro - EventEase</PageTitle>
+
+<div class="container py-4">
+    <h1>Registro</h1>
+
+    <p>Completa tu información para registrarte en el evento (ID: <strong>@id</strong>).</p>
+
+    @if (success)
+    {
+        <div class="alert alert-success">
+            <h4 class="alert-heading">Registro completado</h4>
+            <p>Gracias, <strong>@registration.Name</strong>. Hemos enviado una confirmación al correo <strong>@registration.Email</strong>.</p>
+            <hr />
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary" @onclick="GoToEvents">Volver a Eventos</button>
+                <button class="btn btn-outline-secondary" @onclick="GoHome">Inicio</button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <EditForm Model="registration" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <InputText class="form-control" @bind-Value="registration.Name" />
+                <ValidationMessage For="@(() => registration.Name)" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Correo electrónico</label>
+                <InputText class="form-control" @bind-Value="registration.Email" />
+                <ValidationMessage For="@(() => registration.Email)" />
+            </div>
+
+            <button class="btn btn-primary" type="submit">Enviar registro</button>
+            <button type="button" class="btn btn-link" @onclick="Cancel">Cancelar</button>
+        </EditForm>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    private Registration registration = new();
+    private bool success = false;
+
+    protected override void OnInitialized()
+    {
+        registration.EventId = id;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Simular guardado asincrónico
+        await Task.Delay(300);
+
+        // En una app real aquí llamarías a un servicio para persistir el registro
+        success = true;
+
+        // Add a attendance record representing the registration
+        AttendanceService.AddRecord(registration.EventId, registration.Name, registration.Email, isPresent: false, status: "registered");
+
+        // Optionally, if user is not logged in, set session from the registration
+        if (!UserSession.IsAuthenticated)
+        {
+            UserSession.Login(registration.Name, registration.Email);
+        }
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo($"/events/{id}");
+    }
+
+    private void GoToEvents() => NavigationManager.NavigateTo("/events");
+    private void GoHome() => NavigationManager.NavigateTo("/");
+}

@@ -1,0 +1,36 @@
+@inject ILogger<HybridComponent> Logger
+
+<h3>Hybrid Rendering Component</h3>
+
+@if(Data == null || !Data.Any())// Verifica si la lista de datos está vacía o es nula
+{
+    <p>No data avaible</p>
+}
+else
+{
+    <ul>
+        @foreach(var item in Data)// Itera sobre cada elemento en la lista de datos
+        {
+            <li>@item</li>// Muestra cada elemento en un elemento de lista
+        }
+    </ul>
+}
+
+@code 
+{
+    private List<string> Data = new List<string>();// Lista para almacenar datos simulados
+
+    protected override Task OnInitializedAsync()
+    {
+        // Simulación de carga de datos
+        Console.WriteLine("Loading data in Hybrid Component");
+        Data = new List<string>
+        {
+            "Test Data 1",
+            "Test Data 2",  
+            "Test Data 3"           
+        };
+        Console.WriteLine("Data loaded in Hybrid Component");
+        return Task.CompletedTask;// Retorna una tarea completada
+    }
+}

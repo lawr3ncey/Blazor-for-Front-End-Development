@@ -1,0 +1,23 @@
+﻿@page "/"
+@using Rutinas_Entrenamiento.Services
+@inject RutinaService RutinaService
+
+<h3>Rutina de entrenamientos</h3>
+<ul>
+    @foreach (var rutina in RutinaService.rutinas)
+    {
+        <li>  
+            <strong>@rutina.Nombre</strong>
+            <br />
+            @rutina.Descripcion:
+            @rutina.Duracion minutos
+            <br />
+            <NavLink href="@($"/detalles-entrenamiento/{rutina.Id}")"Match="NavLinkMatch.Prefix">Ver detalles</NavLink>
+        </li>
+    }
+</ul>
+
+<NavLink href="/añadir-rutina">Añadir nueva rutina</NavLink>
+<br />
+<NavLink href="/quitar-rutina">Quitar rutina</NavLink>
+

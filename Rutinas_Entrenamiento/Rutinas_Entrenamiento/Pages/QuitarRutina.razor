@@ -1,0 +1,18 @@
+@page "/quitar-rutina"
+@using Rutinas_Entrenamiento.Services
+@inject RutinaService RutinaService
+@inject NavigationManager NavManager
+
+@code {
+    private string nombreRutina="";    
+    private void FormularioQuitarRutina()
+    {
+        RutinaService.QuitarRutina(nombreRutina);
+        NavManager.NavigateTo("/");
+    }
+}
+
+<h3>Quitar Rutina</h3>
+<input @bind="nombreRutina" placeholder="Nombre de la rutina a quitar" />
+<br />
+<button @onclick="FormularioQuitarRutina">Quitar rutina</button>

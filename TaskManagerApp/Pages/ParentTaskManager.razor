@@ -1,0 +1,33 @@
+@page "/parent-task-manager" // Ruta para el componente padre
+
+<h3>Administrador de Tareas Principal</h3>
+<p>Componente padre - Aquí irá la lista de tareas</p>
+
+@foreach (var task in TaskList) // RENDER DINÁMICO - Iterar sobre la lista de tareas
+{
+    <ChildTaskDisplay TaskName="@task" OnTaskCompleted="HandleTaskCompleted"/> // Instancia del componente hijo
+    /*
+    COMUNICACIÓN PADRE→HIJO: 
+    - TaskName: Pasa datos AL hijo
+    - OnTaskCompleted: Recibe eventos DEL hijo  
+    */
+}
+
+@code {
+    // Lista de tareas gestionada por el componente padre
+    private List<string> TaskList = new List<string> { "Tarea 1", "Tarea 2", "Tarea 3" };
+
+    // MANEJADOR DE EVENTOS - Lógica cuando el hijo notifica
+    private void HandleTaskCompleted(string completedTask)
+    {
+        TaskList.Remove(completedTask); // Eliminar la tarea completada de la lista
+        StateHasChanged(); // Forzar la actualización de la interfaz de usuario
+    }
+}
+
+/*
+Flujo de eventos:
+Usuario hace clic → MarkAsCompleted() → OnTaskCompleted.InvokeAsync() 
+→ HandleTaskCompleted() → TaskList.Remove() → StateHasChanged()
+→ Re-renderizado automático
+*/

@@ -1,0 +1,21 @@
+<div>
+    // Componente hijo que muestra una tarea y permite marcarla como completada
+    <p>@TaskName</p>// Mostrar el nombre de la tarea pasada desde el padre
+    <button @onclick="MarkAsCompleted">Marcar como Completada</button>// Botón para completar la tarea
+</div>
+
+@code {
+    // PARÁMETROS - Recibir datos y eventos del padre
+    [Parameter]
+    public string TaskName { get; set; } = "Tarea sin nombre";// Dato recibido del padre
+
+    // Evento para notificar al padre que la tarea fue completada
+    [Parameter]
+    public EventCallback<string> OnTaskCompleted { get; set; }
+
+    // MÉTODO - Lógica para manejar el clic del botón
+    private async Task MarkAsCompleted()
+    {   
+            await OnTaskCompleted.InvokeAsync(TaskName); // Notificar al padre que la tarea fue completada       
+    }
+}

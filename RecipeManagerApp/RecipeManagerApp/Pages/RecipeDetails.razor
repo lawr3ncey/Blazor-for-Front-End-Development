@@ -1,0 +1,19 @@
+@*Página de detalles de la receta*@
+@using RecipeManagerApp.Services
+@page "/recipe/{id:int}"
+@inject RecipeService RecipeService
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Recipe recipe;// Variable para almacenar la receta actual
+
+    protected override void OnParametersSet()// Método que se llama cuando se establecen los parámetros de la página
+    {
+        recipe = RecipeService.GetRecipe(Id);// Obtener la receta por su ID
+    }
+}
+
+<h3>@recipe?.Name</h3>
+<p>@recipe?.Description</p>

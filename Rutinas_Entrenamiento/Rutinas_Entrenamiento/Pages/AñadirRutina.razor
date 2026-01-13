@@ -1,0 +1,40 @@
+@using Rutinas_Entrenamiento.Services
+@page "/añadir-rutina"
+@inject NavigationManager NavManager
+@inject RutinaService RutinaService
+
+@code {
+    private string nombreRutina="";
+    private string descripcionRutina="";
+    private int duracionRutina = 0;
+
+    private void FormularioRutina()
+    {
+        if (!string.IsNullOrWhiteSpace(nombreRutina) && !string.IsNullOrWhiteSpace(descripcionRutina) && duracionRutina > 0)
+        {
+            var nuevaRutina = new Rutinas
+            {
+                Nombre = nombreRutina,
+                Descripcion = descripcionRutina,
+                Duracion = duracionRutina
+            };
+
+            RutinaService.AñadirRutina(nuevaRutina);
+            NavManager.NavigateTo("/");
+        }
+    }
+}
+
+<h3>Añadir Rutina</h3>
+<input @bind="nombreRutina" placeholder="Nombre de la rutina" />
+<br />
+<textarea @bind="descripcionRutina" placeholder="Descripción de la rutina"></textarea>
+<br />
+<input type="number" @bind="duracionRutina" placeholder="Duración en minutos" />
+<br />
+<button @onclick="FormularioRutina">Añadir</button>
+
+    
+
+
+

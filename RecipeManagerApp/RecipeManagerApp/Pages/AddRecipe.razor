@@ -1,0 +1,33 @@
+@*Página para agregar una nueva receta*@ 
+@using RecipeManagerApp.Services
+@page "/addrecipe"
+@inject NavigationManager NavManager
+@inject RecipeService RecipeService
+
+@code {
+    private string recipeName = "";
+    private string recipeDescription = "";
+    
+    // Método para manejar el envío del formulario
+     private void SubmitRecipe()
+    {
+        if (!string.IsNullOrWhiteSpace(recipeName))
+        {   // Crear una nueva receta y agregarla al servicio
+            var newRecipe = new Recipe 
+            { 
+                Name = recipeName, 
+                Description = recipeDescription 
+            };
+            // Agregar la receta al servicio
+            RecipeService.AddRecipe(newRecipe);
+            NavManager.NavigateTo("/");// Navegar de vuelta a la página principal
+        }
+    }
+}
+
+<h3>Add Recipe</h3>
+<input @bind="recipeName" placeholder="Recipe Name" />
+<br />
+<textarea @bind="recipeDescription" placeholder="Recipe Description"></textarea>
+<br />
+<button @onclick="SubmitRecipe">Submit</button>

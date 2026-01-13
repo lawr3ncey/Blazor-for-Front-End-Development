@@ -1,0 +1,43 @@
+@using Microsoft.AspNetCore.Components
+@inject NavigationManager NavigationManager
+@namespace EventEaseApp
+
+<div class="container py-5 text-center">
+    <h1 class="display-4">404</h1>
+    <h2>Página no encontrada</h2>
+    <p class="lead">Lo sentimos, la dirección que intentas visitar no existe o ha sido movida.</p>
+
+    <div class="mt-4">
+        <button class="btn btn-primary me-2" @onclick="GoHome">Ir al inicio</button>
+        <button class="btn btn-outline-secondary" @onclick="GoEvents">Ver eventos</button>
+    </div>
+
+    <p class="text-muted mt-3">Serás redirigido al inicio en @redirectSeconds segundos...</p>
+</div>
+
+@code {
+    private int redirectSeconds = 7;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _ = CountdownAndRedirect();
+        }
+    }
+
+    private async Task CountdownAndRedirect()
+    {
+        while (redirectSeconds > 0)
+        {
+            await Task.Delay(1000);
+            redirectSeconds--;
+            StateHasChanged();
+        }
+
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void GoHome() => NavigationManager.NavigateTo("/");
+    private void GoEvents() => NavigationManager.NavigateTo("/events");
+}

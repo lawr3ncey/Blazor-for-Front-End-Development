@@ -1,0 +1,19 @@
+@using Rutinas_Entrenamiento.Services
+@inject RutinaService RutinaService
+@page "/detalles-entrenamiento/{id:int}"
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Rutinas rutina = new Rutinas();
+
+    protected override void OnInitialized()
+    {
+        rutina = RutinaService.ObtenerRutina(Id);
+    }
+}
+
+<h3>@rutina.Nombre</h3>
+<p>@rutina.Descripcion</p>
+<p>Duración: @rutina.Duracion minutos</p>
